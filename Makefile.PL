@@ -4,10 +4,15 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     'NAME'		=> 'XML::Beautify',
     'VERSION_FROM'	=> './lib/XML/Beautify.pm', # finds $VERSION
-    'PREREQ_PM'		=> {}, # e.g., Module::Name => 1.1
     'LIBS'		=> [''], # e.g., '-lm'
     'DEFINE'		=> '', # e.g., '-DHAVE_SOMETHING'
     'INC'		=> '', # e.g., '-I/usr/include/other'
+	'PREREQ_PM'		=> { 
+			Log::AndError => 0.99,# e.g., Module::Name => 1.1
+                           }, 
+#    ($] < 5.005 ? () : 
+#      (ABSTRACT_FROM => './lib/XML/Beautify.pm', # retrieve abstract from module
+#       AUTHOR     => 'Thomas Bolioli <Thomas_Bolioli@alumni.adelphi.edu>') 
+#    ),
 );
-
 
