@@ -1,5 +1,14 @@
 Revision history for Perl extension XML::Beautify.
 
-0.01  Fri Mar 15 10:49:55 2002
+0.03  Thur Apr 4 2002
+	- Removed variable $noChar and cleaned up the indenting proceedures...;
+	- ...which fixed bug with CDATA start handler;
+	- Added test suite;
+	- Another problem with Makefile.PL fixed (This time I caught it);
+
+0.02  Mon Mar 25 2002
+	- Problem with Makefile.PL fixed (Thanks to testers.cpan.org);
+
+0.01  Fri Mar 15 2002
 	- Born On Date;
 

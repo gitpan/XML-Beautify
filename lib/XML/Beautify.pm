@@ -1,7 +1,7 @@
 package XML::Beautify;
 #require 5.6.0;
 require 5.005;
-$XML::Beautify::VERSION = 0.02;
+$XML::Beautify::VERSION = 0.03;
 
 use strict;
 #use warnings;
@@ -12,7 +12,7 @@ use XML::Parser::Expat;
 ##############################################################################
 ## Variables
 ##############################################################################
-my($ref_self, $cleanXMLstr, $level, $noChar, $last_handle);
+my($ref_self, $cleanXMLstr, $level, $last_handle);
 my %Deflt = (
 	'INDENT_STR' => "\t",
 	'ORIG_INDENT' => -1,
@@ -28,7 +28,8 @@ XML::Beautify - Beautifies XML output from XML::Writer.
 
 =head1 SYNOPSIS
 
-	B<WARNING:> This is Alpha Software. Plenty is subject to change.
+	B<WARNING:> This is Alpha Software. Plenty is subject to change. Oh, and keep backups, Doh!!!
+	B<WARNING:> This does not do well with already indented and formatted XML. I am still working on that.
 	use XML::Beautify;
 	$obj_ref = XML::Beautify->new();
 	$cleanXML = $obj_ref->beautify(\$XMLstr);
@@ -128,7 +129,7 @@ $expat->setHandlers(
 );
 
 ###HERE Need to find a better way to handle this and not use static globals.
-($ref_self, $cleanXMLstr, $level, $noChar, $last_handle) = ($self, undef, $self->orig_indent, undef, undef);
+($ref_self, $cleanXMLstr, $level, $last_handle) = ($self, undef, $self->orig_indent, undef);
 ###HERE Using these perhaps???
 #context
 #Returns a list of element names that represent open elements, with the last one being the innermost. Inside start and end tag handlers, this will be the tag of the parent element. 
@@ -144,7 +145,7 @@ $expat->parse($$ref_XMLstr);
 
 ###HERE Need to find a better way to handle this and not use static globals.
 # Reset the values
-($ref_self, $level, $noChar, $last_handle) = ($self, $self->orig_indent, undef, undef);
+($ref_self, $level, $last_handle) = ($self, $self->orig_indent, undef);
 $expat->release();
 $self->logger(DEBUG4, 'RETURN[beautify()]: '.$self->error_code().'/'.$self->error_msg()); 
 wantarray ? return($self->error(), $cleanXMLstr) : return($cleanXMLstr);
@@ -265,7 +266,7 @@ $ref_self->logger(DEBUG4, 'RETURN[_doc()]: '.$ref_self->error_code().'/'.$ref_se
 sub _decl{
 #XMLDecl (Parser, Version, Encoding, Standalone)
 #This handler is called for xml declarations. Version is a string containg the version. Encoding is either undefined or contains an encoding string. Standalone will be either true, false, or undefined if the standalone attribute is yes, no, or not made respectively. 
-$ref_self->logger(DEBUG4, '_decl('.join(',',@_).')'); 
+$ref_self->logger(DEBUG4, '_decl('.join(',',@_).')');
 $ref_self->error(-1, 'OK');
 my($parser, $ver, $encoding, $standalone) = @_;
 
@@ -290,7 +291,7 @@ my($parser, $element) = ($_[0], $_[1]);
 ###HERE Try putting all data on the line with the Start Tag and then not 
 #	$ref_self->append_str($indent.$parser->original_string."\n");
 	$ref_self->append_str($indent.$line);
-	$noChar = 1; # Set this so _end() can tell if there was any data and indent appropriately
+	###HERE Not Needed $noChar = 1; # Set this so _end() can tell if there was any data and indent appropriately
 
 $last_handle = '_start';
 $ref_self->logger(DEBUG4, 'RETURN[_start()]: '.$ref_self->error_code().'/'.$ref_self->error_msg()); 
@@ -304,11 +305,10 @@ $ref_self->logger(DEBUG4, '_end('.join(',',@_).')');
 $ref_self->error(-1, 'OK');
 my($parser, $element) = ($_[0], $_[1]);
 
-###HERE Put something in _start() and _char() that can tell if any data came through in between the tags
 	my $line = $parser->original_string();
 	$line =~ s/^\w//gio;
 	my $indent = '';
-	unless($noChar || ($last_handle eq '_char')){
+	unless( ($last_handle eq '_char')){###HERE Not Needed $noChar || 
 		$indent = $ref_self->indent_str x $level;
 	}
 	$ref_self->append_str($indent.$line."\n");
@@ -326,7 +326,7 @@ $ref_self->error(-1, 'OK');
 my($parser, $string) = ($_[0], $_[1]);
 
 	$ref_self->append_str($parser->original_string);#."\n"
-	$noChar = 0; # Tells _end() that some data was present
+	###HERE Not Needed $noChar = 0; # Tells _end() that some data was present
 
 $last_handle = '_char';
 $ref_self->logger(DEBUG4, 'RETURN[_char()]: '.$ref_self->error_code().'/'.$ref_self->error_msg()); 
@@ -367,7 +367,7 @@ sub _cDataStart{
 $ref_self->logger(DEBUG4, '_cDataStart('.join(',',@_).')'); 
 $ref_self->error(-1, 'OK');
 my($parser) = ($_[0]);
-	$ref_self->append_str($parser->original_string."\n");
+	$ref_self->append_str($parser->original_string);
 $last_handle = '_cDataStart';
 $ref_self->logger(DEBUG4, 'RETURN[_cDataStart()]: '.$ref_self->error_code().'/'.$ref_self->error_msg()); 
 }
@@ -487,25 +487,7 @@ $ref_self->logger(DEBUG4, 'RETURN[_attriblist()]: '.$ref_self->error_code().'/'.
 
 =head1 HISTORY
 
-=head2 Ver 0.02 - 3/24/02
-
-=over 1
-
-=item *
-
-Problem with Makefile.PL fixed.
-
-=back
-
-=head2 Ver 0.01 - 3/16/02
-
-=over 1
-
-=item *
-
-Born on Date.
-
-=back
+=head2 See Changes file in distribution
 
 =head1 TODO
 
@@ -513,7 +495,11 @@ Born on Date.
 
 =item *
 
-Add TESTS to dist package!!!!!
+Deal with already formatted or mis-formatted XML.
+
+=item *
+
+Take an array and other things as an arg to C<beautify()>.
 
 =item * 
 
@@ -521,11 +507,11 @@ Better documentation.
 
 =item *
 
-Replace static variables.
+Replace static variables. (Started to in ver 0.03)
 
 =item *
 
-See if the current state tracking can be replaced with C<context()>, C<current_element()>, C<in_element()> functions from expat.
+See if the current state tracking can be replaced with C<context()>, C<current_element()>, C<in_element()> functions from expat. (Related to above about statics)
 
 =back
 
