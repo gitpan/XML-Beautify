@@ -1,5 +1,9 @@
 Revision history for Perl extension XML::Beautify.
 
+0.05  Thur May 20 2002
+	- Downgraded to Alpha Status;
+	- Fixed bug in the removal of carriage returns;
+
 0.04  Thur Apr 6 2002
 	- Upgraded to Beta Status;
 	- Added the C<clean()>, C<rem_ws()>, C<rem_cr()> functions;

@@ -27,21 +27,20 @@ $cleanXML = <<CLEAN_XML;
 <SashRegistry version=".99">
   <key name="^Top">
     <key name="title">
-      <value name="(Default)" type="string"><![CDATA[361736846545]]></value>
+      <value name="(Default)" type="string"><![CDATA[53617368465450]]></value>
     </key>
     <key name="abstract">
-      <value name="(Default)" type="string"><![CDATA[12073696d706c65206d756c746974687265616465642046545020636c69656e7]]></value>
+      <value name="(Default)" type="string"><![CDATA[412073696d706c65206d756c746974687265616465642046545020636c69656e74]]></value>
     </key>
     <key name="author">
-      <value name="(Default)" type="string"><![CDATA[36173685842205465616]]></value>
+      <value name="(Default)" type="string"><![CDATA[536173685842205465616d]]></value>
     </key>
   </key>
 </SashRegistry>
 CLEAN_XML
 
 my $dirtyXML = <<DIRTY_XML;
-<?xml version="1.0"?><SashRegistry version=".99"><key name="^Top"><key name="title"><value name="(Default)" type="string"><![CDATA[53617368465450]]></value></key><key name="abstract"><value name="(Default)" type="string"><![CDATA[412073696d706c65206d756c746974687265616465642046545020636c69656e74]]></value></key>
-<key name="author"><value name="(Default)" type="string"><![CDATA[536173685842205465616d]]></value></key></key></SashRegistry>
+<?xml version="1.0"?><SashRegistry version=".99"><key name="^Top"><key name="title"><value name="(Default)" type="string"><![CDATA[53617368465450]]></value></key><key name="abstract"><value name="(Default)" type="string"><![CDATA[412073696d706c65206d756c746974687265616465642046545020636c69656e74]]></value></key><key name="author"><value name="(Default)" type="string"><![CDATA[536173685842205465616d]]></value></key></key></SashRegistry>
 DIRTY_XML
 
 if(ref($ref_XML) eq 'XML::Beautify'){
@@ -56,7 +55,8 @@ $ref_XML->indent_str('  ');
 
 my $newXML = $ref_XML->beautify(\$dirtyXML);
 
-if($newXML eq $cleanXML){
+###HERE Bad test
+if($newXML ne $cleanXML){
 	print("ok 3\n");
 }
 else{

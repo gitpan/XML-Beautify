@@ -1,7 +1,7 @@
 package XML::Beautify;
 #require 5.6.0;
 require 5.005;
-$XML::Beautify::VERSION = 0.04;
+$XML::Beautify::VERSION = 0.05;
 
 use strict;
 #use warnings;
@@ -25,8 +25,8 @@ my($ref_self, $cleanXMLstr, $level, $last_handle);
 my %Deflt = (
 	'INDENT_STR' => "\t",
 	'ORIG_INDENT' => -1,
-	'REM_CR'		=> YES,
-	'REM_WS'		=> FULL,
+	'REM_CR'		=> NO,
+	'REM_WS'		=> NO,
 );
 
 ##############################################################################
@@ -39,7 +39,7 @@ XML::Beautify - Beautifies XML output from XML::Writer (soon to do any XML).
 
 =head1 SYNOPSIS
 
-	B<WARNING:> This is Beta Software. The interface is still subject to change but not likely. There will likely only be additions from this point out. Oh, and keep backups, Doh!!!
+	B<WARNING:> This is Alpha Software. The interface is still subject to change. Oh, and keep backups, Doh!!!
 	B<WARNING:> This does not do well with already indented and formatted XML. I am still working on that. I am currently just reprinting the original string with E<additional whitespace>. I need to fix this by actually rewriting the XML from the element level on down using something like XML::Writer but adding in the whitespace. See E<recursive...>, Doh!
 
 	use XML::Beautify qw(:const); # imports three constants (YES,NO,FULL)
@@ -645,7 +645,8 @@ $self->error(-1, 'OK');
 my($XMLstr) = ($_[0]);
 
 	if($self->rem_cr()){
-		$XMLstr =~ s/\012?\015?//gio;
+		#$XMLstr =~ s/\012?\015?//gio;
+		$XMLstr =~ s/\n//gio;
 	}
 	if($self->rem_ws()){
 		$XMLstr =~ s/^\w//gio;
