@@ -1,5 +1,11 @@
 Revision history for Perl extension XML::Beautify.
 
+0.04  Thur Apr 6 2002
+	- Upgraded to Beta Status;
+	- Added the C<clean()>, C<rem_ws()>, C<rem_cr()> functions;
+	- Added the constants (YES, NO, FULL);
+	- Realized that formatting already formatted XML is going to be much more work than I bargained for...;
+
 0.03  Thur Apr 4 2002
 	- Removed variable $noChar and cleaned up the indenting proceedures...;
 	- ...which fixed bug with CDATA start handler;
